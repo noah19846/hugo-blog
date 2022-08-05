@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>32 位保护模式 - Tag - Kisama&#39;s Blog</title>
+        <link>https://moshimoshi.top/tags/32-%E4%BD%8D%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/</link>
+        <description>32 位保护模式 - Tag - Kisama&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 24 Aug 2021 21:49:22 &#43;0000</lastBuildDate><atom:link href="https://moshimoshi.top/tags/32-%E4%BD%8D%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/" rel="self" type="application/rss+xml" /><item>
+    <title>x86 32 位保护模式笔记</title>
+    <link>https://moshimoshi.top/posts/x86-32-%E4%BD%8D%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Tue, 24 Aug 2021 21:49:22 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/x86-32-%E4%BD%8D%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[概念 32 位保护模式 32 位保护模式（后面统一简称保护模式）是区别于 16 位 CPU 任何程序可以访问任何内存空间的模式（自保护模式出来后，16 位 CPU 运行的模式被称为实模式)，在这种模式下所有对内存的访问都要通过一个段选择子的东西，而要被访问的内存也必须先在一个叫做 GDT（全局描述符表） 的东西中定义，这个段选择子实质上就是全局描述符表中某个描述符的索引，通过段选择子找到对应的描述符，然后通过描述符里的记录的相关段的信息再去访问对应的内存。32 保护模式下的段不再像实模式下的段一样需要是以 16 的整数倍为起始地址了，它可从任何地址开始，所以 32 位保护模式下的段就可以理解为描述符描描述的内存中的某一连续空间。全局描述符表又通过一个叫 GDTR（全局描述符表寄存器） 的东西里的内容来定义。
+相比于实模式，32 位保护模式的数据总线、地址总线的长度都是 32 位。通用寄存器也扩展到了 32 位：EAX、EBX、ECX、EDX、ESI、EDI、EBP、ESP，而且依然可以通过 AX、AL、AH 来访问 EAH 的低 16 位、低 8 位以及第 8 到 16 位。但段寄存器依然保持 16 位，此外新增了两个段寄存器 FS、GS。
+GDT 顾名思义，如中断向量表类似，GDT 是一个表，每个表项是一个描述内存中某块区域的段描述符，用 64 位来描述内存段的属性，包括：
+ 基址（32 位） 大小（20 位） 类型（1 位，可用于区分系统段和用户段） 子类（4 位，比如用户段又分代码段、数据段） 描述符特权级 DPL（2 位，0，1，2，3，越小说明级别最高） 是否在内存（1 位） AVL（1 位，硬件没用上） L，是否是 64 位代码段（1 位，保留位） D/B，兼容 286 的保护模式（1 位） 段大小单位（1 位，分为 1B 和 4KB）  32 位基址覆盖了 4GB 的内存空间。20 位段大小以及对应段大小的单位可以为 4KB 表明一个段最大可以是 4GB。]]></description>
+</item>
+</channel>
+</rss>

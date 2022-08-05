@@ -1,0 +1,19 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Nginx - Tag - Kisama&#39;s Blog</title>
+        <link>https://moshimoshi.top/tags/nginx/</link>
+        <description>Nginx - Tag - Kisama&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 15 Oct 2020 17:40:32 &#43;0000</lastBuildDate><atom:link href="https://moshimoshi.top/tags/nginx/" rel="self" type="application/rss+xml" /><item>
+    <title>Vue 应用部署在非根路径</title>
+    <link>https://moshimoshi.top/posts/vue-%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E9%9D%9E%E6%A0%B9%E8%B7%AF%E5%BE%84/</link>
+    <pubDate>Thu, 15 Oct 2020 17:40:32 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/vue-%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E9%9D%9E%E6%A0%B9%E8%B7%AF%E5%BE%84/</guid>
+    <description><![CDATA[注：此处 Vue App 指的是由 Vue-CLI 3 创建的单页面应用，部署应用的 Web 服务器为 Nginx。
+正文 谈到部署前端应用，大概所有有过相关经历的开发者都不会对这个流程感到陌生：npm run build -&gt; dist 目录整个 copy （手动、脚本或 devops 流水线）到对应 Web 服务器的指定目录。
+然后在浏览器上输入服务器的地址（不需要任何路径）就可以访问到部署的那个应用了，在应用里面，你也只是按照后台开发给你 API 路径（大概率是个不包括服务器地址的绝对路径）去请求对应的数据，好像也没有做什么特殊的事情，应用完全运行正常。
+这一切看起来十分的自然和理所应当，后面你又以相同的方式开发、部署了多个类似的应用，这种在根路径上的部署，对你来说轻车熟路，一切都很顺利。直到有一天，因为防火墙、或者资金紧张或者其他随便的什么原因，你们所有那些应用在公网上全都只能通过某一台服务器（假设叫 outer）访问了，也就是说原先可以分别通过 http://addressN （N = 1, 2, 3&hellip;）被  访问的各个应用，现在只能通过 http://address/appN/ 来访问了。这个时候，你想了想好像跟之前没什么区别，（拿 app1 举例）只不过原先部署到 http://address1 的 app1 只能换个内部的服务器（假设叫 inner1）部署了，然后在你重新部署了之后，负责配置 http://address 服务器 Nginx 的人告诉你：我把所有 /app1/ 开头的请求都转到 inner1 上了，你现在看下通过 http://address/app1/ 是不是能访问到 app1。
+你内心感觉应该没什么问题地在浏览器上访问了那个地址：浏览器 Tab 条上 app1 的页面 title 出来了，但是整个页面一片空白。然后你很熟练地打开了控制台的 Network 发现，那些 js 和 css 资源都是 404，你很快的察觉到原因是由于这些资源的路径有问题，它们的格式分别是 /js/xx.]]></description>
+</item>
+</channel>
+</rss>

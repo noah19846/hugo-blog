@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>8086 寄存器、指令笔记 - Kisama&#39;s Blog</title><meta name="Description" content="This is my cool site"><meta property="og:title" content="8086 寄存器、指令笔记" />
+<meta property="og:description" content="8086 寄存器分类 所有寄存器均为 16 位，其中 AX、BX、CX、DX 分别可以分成两个 8 位的寄存器使用，比如 AH, AL 分别表示 AX 的高 8 位和低 8 位。
+通用：
+ AX, BX, CX, DX SP, BP SI, DI  专用：
+ IP PSW CS, DS, SS, FS  8086 指令分类  运算类  算数运算: add, sub&hellip; 逻辑运算: and, or&hellip; 移位运算: shr, shl&hellip;   传送类  单传送: mov, push&hellip; 串传送: movsb I/O 传送：int, out   跳转类  直接跳转：jmp 间接跳转：call、ret、iret、loop, int&hellip;   修改标志位类：sti, cli&hellip;  标记寄存器标记位意义 高四位和低六位中的三个奇数位未用上。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/" />
+<meta property="article:published_time" content="2021-07-23T22:56:31+00:00" />
+<meta property="article:modified_time" content="2021-07-23T22:56:31+00:00" /><meta property="og:site_name" content="My cool site" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="8086 寄存器、指令笔记"/>
+<meta name="twitter:description" content="8086 寄存器分类 所有寄存器均为 16 位，其中 AX、BX、CX、DX 分别可以分成两个 8 位的寄存器使用，比如 AH, AL 分别表示 AX 的高 8 位和低 8 位。
+通用：
+ AX, BX, CX, DX SP, BP SI, DI  专用：
+ IP PSW CS, DS, SS, FS  8086 指令分类  运算类  算数运算: add, sub&hellip; 逻辑运算: and, or&hellip; 移位运算: shr, shl&hellip;   传送类  单传送: mov, push&hellip; 串传送: movsb I/O 传送：int, out   跳转类  直接跳转：jmp 间接跳转：call、ret、iret、loop, int&hellip;   修改标志位类：sti, cli&hellip;  标记寄存器标记位意义 高四位和低六位中的三个奇数位未用上。"/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/" /><link rel="prev" href="https://moshimoshi.top/posts/8086-%E5%BC%80%E6%9C%BA%E6%B5%81%E7%A8%8B%E7%AC%94%E8%AE%B0/" /><link rel="next" href="https://moshimoshi.top/posts/macos-%E4%B8%8B%E8%B0%83%E8%AF%95-8086-%E6%B1%87%E7%BC%96/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "8086 寄存器、指令笔记",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/moshimoshi.top\/posts\/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0\/"
+        },"genre": "posts","keywords": "汇编, 8086","wordcount":  280 ,
+        "url": "https:\/\/moshimoshi.top\/posts\/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0\/","datePublished": "2021-07-23T22:56:31+00:00","dateModified": "2021-07-23T22:56:31+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Author"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Kisama&#39;s Blog">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Kisama&#39;s Blog">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">8086 寄存器、指令笔记</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Author</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%B1%87%E7%BC%96/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>汇编</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2021-07-23">2021-07-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;280 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#8086-寄存器分类">8086 寄存器分类</a></li>
+    <li><a href="#8086-指令分类">8086 指令分类</a></li>
+    <li><a href="#标记寄存器标记位意义">标记寄存器标记位意义</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="8086-寄存器分类">8086 寄存器分类</h2>
+<p>所有寄存器均为 16 位，其中 AX、BX、CX、DX 分别可以分成两个 8 位的寄存器使用，比如 AH, AL 分别表示 AX 的高 8 位和低 8 位。</p>
+<p>通用：</p>
+<ul>
+<li>AX, BX, CX, DX</li>
+<li>SP, BP</li>
+<li>SI, DI</li>
+</ul>
+<p>专用：</p>
+<ul>
+<li>IP</li>
+<li>PSW</li>
+<li>CS, DS, SS, FS</li>
+</ul>
+<h2 id="8086-指令分类">8086 指令分类</h2>
+<ul>
+<li>运算类
+<ul>
+<li>算数运算: add, sub&hellip;</li>
+<li>逻辑运算: and, or&hellip;</li>
+<li>移位运算: shr, shl&hellip;</li>
+</ul>
+</li>
+<li>传送类
+<ul>
+<li>单传送: mov, push&hellip;</li>
+<li>串传送: movsb</li>
+<li>I/O 传送：int, out</li>
+</ul>
+</li>
+<li>跳转类
+<ul>
+<li>直接跳转：jmp</li>
+<li>间接跳转：call、ret、iret、loop, int&hellip;</li>
+</ul>
+</li>
+<li>修改标志位类：sti, cli&hellip;</li>
+</ul>
+<h2 id="标记寄存器标记位意义">标记寄存器标记位意义</h2>
+<p>高四位和低六位中的三个奇数位未用上。</p>
+<p>&mdash;-ODITSZ-A-P-C</p>
+<ul>
+<li>C(Carry)：进、借位标志，有则为 1，反之为 0；只对无符号运算有意义（inc, dec 指令不影响）</li>
+<li>P(Parity)：奇偶标志，运算结果里 1 的个数，偶数个位 1，反之为 0（运算类的指令都会影响）</li>
+<li>A(Auxiliary carry)：运算时最低半字节是否有进、借位，有则为 1，反之为 0，只要是处理器内部使用</li>
+<li>Z(Zero)：运算结果是否为 0 的标志，是则为 1，反之位 0（运算类的指令都会影响）</li>
+<li>S(Sign)：运算的结果是否为负，是则为 1，反之位 0，只对有符号运算有意义（运算类的指令都会影响）</li>
+<li>T(Trap)：陷阱标志，用于标识 CPU 是否允许单步中断，是则为 1，反之则为 0</li>
+<li>I(Interrupt)：是否允许可屏蔽中断，为 1 允许，反之不允许，通过 cli, sti 设置，前者设置为 0，后者设置为 1</li>
+<li>D(Direction)：movsb 串处理指令的方向标志，通过 cld, std 指令赋值，前者赋为 0，后者赋为 1；取 0 时每次传送 si, di 自增 1，反正自减 1</li>
+<li>O(Overflow)：溢出标志，有符号运算的结果是否溢出，溢出则为 1，反之为 0，只对有符号运算有意义</li>
+</ul>
+<p>DEBUG 中 <code>-r</code> 时 8 个标记（没有 TF）的对应 0 和 1 的取值：</p>
+<p>CF: NC CY</p>
+<p>PF: PO PE</p>
+<p>AF: NA AC</p>
+<p>ZF: NZ ZR</p>
+<p>SF: PL NG</p>
+<p>IF: DI EI</p>
+<p>DF: UP DN</p>
+<p>OF: NV OV</p>
+<p>可以在 DEBUG 中验证标记位变化的 asm 代码：</p>
+<pre><code>; CF
+; mov al, 0ffh
+; add al, 1
+; mov al, 0ffh
+; add al, 2
+
+; mov al, 0ffh
+; add al, 0ffh
+
+; PF
+; mov al, 0
+; add al, 3
+; add al, 1
+; inc al
+; shr al, 2
+
+
+; AF
+; mov al, 0eh
+; add al, 2
+; or al, al
+; dec al
+; sub al, 1
+
+; ZF, SF
+; mov al, 1
+; and al, 0
+; inc al
+; shl al, 7
+; sar al, 7
+
+; TF
+;
+
+; IF
+; cli
+; sti
+
+; DF
+; std
+; cld
+; std
+
+; OF
+; mov al, 0ffh
+; add al, 080h
+; add al, 7fh
+
+</code></pre><p>CPU 进行的是有符号运算还是无符号运算这个意义是编程人员赋予的，CPU 在计算时会统一用补码进行运算，但是会同时把有符号和无符号运算的相关结果存储在标志寄存器中，比如当运算是无符号运算是是否有进位，当运算是有符号运算时是否有溢出，这样编程人员就可以依据自己赋予的意义去标志寄存器的对应标记取得相应的结果。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-07-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/" data-title="8086 寄存器、指令笔记" data-hashtags="汇编,8086"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/" data-hashtag="汇编"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/" data-title="8086 寄存器、指令笔记"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/" data-title="8086 寄存器、指令笔记"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/" data-title="8086 寄存器、指令笔记"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96/">汇编</a>,&nbsp;<a href="/tags/8086/">8086</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/8086-%E5%BC%80%E6%9C%BA%E6%B5%81%E7%A8%8B%E7%AC%94%E8%AE%B0/" class="prev" rel="prev" title="8086 开机流程笔记"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>8086 开机流程笔记</a>
+            <a href="/posts/macos-%E4%B8%8B%E8%B0%83%E8%AF%95-8086-%E6%B1%87%E7%BC%96/" class="next" rel="next" title="MacOs 下调试 8086 汇编">MacOs 下调试 8086 汇编<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.68.3">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

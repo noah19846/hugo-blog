@@ -1,0 +1,20 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>slot - Tag - Kisama&#39;s Blog</title>
+        <link>https://moshimoshi.top/tags/slot/</link>
+        <description>slot - Tag - Kisama&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 21 Sep 2021 21:07:57 &#43;0000</lastBuildDate><atom:link href="https://moshimoshi.top/tags/slot/" rel="self" type="application/rss+xml" /><item>
+    <title>Vue2.6 slot 笔记</title>
+    <link>https://moshimoshi.top/posts/vue-slot-%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Tue, 21 Sep 2021 21:07:57 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/vue-slot-%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[什么是 slot？——精确的定义不好下，可以类比为电脑主板上用于插网卡、内存条等各种硬件的那些东西。因为有那些插槽，人们可以在上面插上不同的网卡和内存条。
+slot 有什么用？——先设想，如果没有 slot，那些硬件就必须集成在主板上，显然不是一种灵活的做法，slot 就赋予了这种灵活性。
+拿电脑主板打比方后，Vue 的 slot 的作用也就是一样的：赋予组件直接将 vnode 填充到组件的渲染内容中特定地方的能力。slot 相关的用法 Vue 文档有详述，本篇主要记录 slot 的实现原理，v2.6 之前的 slot attribute 的即将废弃的写法不作讨论，主要说明 v-slot 写法的 slot。
+renderSlot 先从有 slot 的组件的 render 方法说起，比如下面的组件：
+&lt;template&gt; &lt;div&gt; &lt;slot&gt;&lt;/slot&gt; &lt;/div&gt; &lt;/template&gt; &lt;script&gt; export default { name: 'Hello' } &lt;/script&gt; 的 render 函数会是：
+function() { var _vm = this var _h = _vm.$createElement var _c = _vm._self._c || _h return _c(&quot;div&quot;, [_vm._t(&quot;default&quot;)], 2) } 其中 _vm._t 就是 renderSlot]]></description>
+</item>
+</channel>
+</rss>

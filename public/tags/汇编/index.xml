@@ -1,0 +1,62 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>汇编 - Tag - Kisama&#39;s Blog</title>
+        <link>https://moshimoshi.top/tags/%E6%B1%87%E7%BC%96/</link>
+        <description>汇编 - Tag - Kisama&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 24 Aug 2021 21:49:22 &#43;0000</lastBuildDate><atom:link href="https://moshimoshi.top/tags/%E6%B1%87%E7%BC%96/" rel="self" type="application/rss+xml" /><item>
+    <title>x86 32 位保护模式笔记</title>
+    <link>https://moshimoshi.top/posts/x86-32-%E4%BD%8D%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Tue, 24 Aug 2021 21:49:22 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/x86-32-%E4%BD%8D%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[概念 32 位保护模式 32 位保护模式（后面统一简称保护模式）是区别于 16 位 CPU 任何程序可以访问任何内存空间的模式（自保护模式出来后，16 位 CPU 运行的模式被称为实模式)，在这种模式下所有对内存的访问都要通过一个段选择子的东西，而要被访问的内存也必须先在一个叫做 GDT（全局描述符表） 的东西中定义，这个段选择子实质上就是全局描述符表中某个描述符的索引，通过段选择子找到对应的描述符，然后通过描述符里的记录的相关段的信息再去访问对应的内存。32 保护模式下的段不再像实模式下的段一样需要是以 16 的整数倍为起始地址了，它可从任何地址开始，所以 32 位保护模式下的段就可以理解为描述符描描述的内存中的某一连续空间。全局描述符表又通过一个叫 GDTR（全局描述符表寄存器） 的东西里的内容来定义。
+相比于实模式，32 位保护模式的数据总线、地址总线的长度都是 32 位。通用寄存器也扩展到了 32 位：EAX、EBX、ECX、EDX、ESI、EDI、EBP、ESP，而且依然可以通过 AX、AL、AH 来访问 EAH 的低 16 位、低 8 位以及第 8 到 16 位。但段寄存器依然保持 16 位，此外新增了两个段寄存器 FS、GS。
+GDT 顾名思义，如中断向量表类似，GDT 是一个表，每个表项是一个描述内存中某块区域的段描述符，用 64 位来描述内存段的属性，包括：
+ 基址（32 位） 大小（20 位） 类型（1 位，可用于区分系统段和用户段） 子类（4 位，比如用户段又分代码段、数据段） 描述符特权级 DPL（2 位，0，1，2，3，越小说明级别最高） 是否在内存（1 位） AVL（1 位，硬件没用上） L，是否是 64 位代码段（1 位，保留位） D/B，兼容 286 的保护模式（1 位） 段大小单位（1 位，分为 1B 和 4KB）  32 位基址覆盖了 4GB 的内存空间。20 位段大小以及对应段大小的单位可以为 4KB 表明一个段最大可以是 4GB。]]></description>
+</item>
+<item>
+    <title>8086 中断笔记</title>
+    <link>https://moshimoshi.top/posts/8086-%E4%B8%AD%E6%96%AD%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Sun, 08 Aug 2021 17:08:35 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/8086-%E4%B8%AD%E6%96%AD%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[中断机制 何为中断？中断是一种打断处理器当前运行流程进而获得其控制权的机制。可以说如果没有中断这种机制，那么处理器就是个只会朝着某个方向一直冲的铁憨憨，别人叫它，它也不一定能正确地理会，哪怕键盘敲烂了都没有。每个中断都对应一个编号，处理器处理中断时，根据编号找到它对应的中断处理程序的入口地址，拿到中断处理程序地址后，将之前程序的上下文（CS, IP, FLAGS）入栈保存并将 IF 和 TF 清零，然后跳转到中断处理程序入口处执行。中断处理程序执行完毕后调用 iret 指令（作用就是将之前保存的上下文再按正确顺序出站）返回之前的程序继续执行。处理器响应中断跳到其对应的中断处理程序执行的过程即控制权从原来的程序转移到新程序的过程。与一般的子程序一样，中断处理程序内部要要用到的寄存器在使用之前应该将它们的数据保存入栈，在返回之前再恢复原状，以免破坏外部程序的状态。
+中断分类 处理器提供两种途径触发中断，一种是从处理器外部通过向一个叫做 8259A 的可编程中断控制器发送信号来产生中断，另一种是处理器内部自行产生中断（由程序直接调用中断指令，或是某些条件下处理器执行指令时自己产生），前者产生的叫外中断，后者叫内中断。外中断又分为可屏蔽中断和不可屏蔽中断。
+外部中断 可屏蔽中断的信号通过 INTR 信号线传递，最终被处理器处理需要经过两道关卡，第一个是 8259A，8259A 可以控制是否为从外部收到的中断信号生成对应的中断通知给处理器，外部硬件产生的中断信号只有被 8259A 生成对应的中断通知给处理器才有可能被处理器处理；过了 8259A 那关才能进到第二关：处理器中标志寄存器的 IF 位的值。如果是处理器从 8259A 那里收到中断事件时，当前的 IF 位为 0，那么这个中断也不会被处理，只有 IF 位为 1 才会被处理。
+不可屏蔽中断的信号则通过 NMI 信号线传递。顾名思义，与可屏蔽中断相比，不可屏蔽中断产生时，处理器必须处理。正因如此，不可屏蔽中断通常意味着一些灾难性事件，比如即将断电、内存检测异常、总线校验错误等。显然它的优先级也比可屏蔽终端要高（当同时有多个中断产生时）。NMI 中断编号为 2。
+内部中断 内部中断分为通过 INT 指令产生的中断（称为 software interrupt）和处理器自己产生的中断。前者除了 INT 指令外，还有断点中断指令 INT3 （中断编号为 3）和溢出中断指令 INTO（中断编号为 4）。后者则包括处理器做除法运算时除数为零时产生的除数为零中断（中断编号为 0）、处理器执行完一条指令发现 TF 标记位为 1 时产生的单步调试中断（中断编号为 1）。
+常见中断优先级 中断优先级由高到低：
+ 除数为 0、INT n、INTO NMI INTR 单步调试中断  中断向量表 8086 处理器可以支持 256 种中断，从 0 编号到 255。每个编号对应一个中断处理程序的入口地址，这个入口地址为一个偏移地址和段地址组成的二元组，这个二元组就是中断向量，256 个二元组组成的表也就是中断向量表。这个表从 0 号中断向量开始依次存储在 0x00000~0x003ff 对应的 1KB 内存空间，每个中断向量占 4 个字节，低地址 2 个字节存储偏移地址，高地址 2 个字节存储段地址。也就是说对于 256 个中断中的某个 n 号中断，其对应的中断向量为 (4*n, 4*n+2)。]]></description>
+</item>
+<item>
+    <title>MacOs 下调试 8086 汇编</title>
+    <link>https://moshimoshi.top/posts/macos-%E4%B8%8B%E8%B0%83%E8%AF%95-8086-%E6%B1%87%E7%BC%96/</link>
+    <pubDate>Sat, 24 Jul 2021 11:59:59 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/macos-%E4%B8%8B%E8%B0%83%E8%AF%95-8086-%E6%B1%87%E7%BC%96/</guid>
+    <description><![CDATA[所需工具  x86 DOS 模拟器：dosbox DOS 上运行调试工具：DEBUG.EXE 汇编器（链接器）：DOS 上运行的 MASM.EXE、LINK.EXE 或者直接使用 MacOs 自带的 nasm  dosbox 配置  去 https://www.dosbox.com/download.php?main=1 下载对应 dmg 文件 点击，运行里面的 dosbox，弹出一个窗口 打开 ~/Library/Preferences/DOSBox 0.74-3-3 Preferences 文件，在文件末尾 [autoexec] 下添加  mount C: ~/dosbox C: 不加上面两个命令的话，每次都要重复输入。挂载目录可按照自己喜好来选，配置文件名中的 0.74-3-3 可能会因实际的 dosbox 软件版本不同而有所差异。
+创建挂载目录 dosbox（第 3 步配置文件添加的命令中的挂载目录） 将 DEBUG.EXE、MASM.EXE、LINK.EXE 等可执行文件丢到 dosbox 目录，如果使用的是 MacOs 自带的 nasm 汇编器，那么 DEBUG.EXE 和 MASM.EXE 就不需要了，编译过程在 MacOS 的 shell 里完成就行 重新打开 dosbox  之后通过汇编器生成的 EXE 文件都让它生成到 ~/dosbox 目录下，然后使用 debug filename.]]></description>
+</item>
+<item>
+    <title>8086 寄存器、指令笔记</title>
+    <link>https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Fri, 23 Jul 2021 22:56:31 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/8086-%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[8086 寄存器分类 所有寄存器均为 16 位，其中 AX、BX、CX、DX 分别可以分成两个 8 位的寄存器使用，比如 AH, AL 分别表示 AX 的高 8 位和低 8 位。
+通用：
+ AX, BX, CX, DX SP, BP SI, DI  专用：
+ IP PSW CS, DS, SS, FS  8086 指令分类  运算类  算数运算: add, sub&hellip; 逻辑运算: and, or&hellip; 移位运算: shr, shl&hellip;   传送类  单传送: mov, push&hellip; 串传送: movsb I/O 传送：int, out   跳转类  直接跳转：jmp 间接跳转：call、ret、iret、loop, int&hellip;   修改标志位类：sti, cli&hellip;  标记寄存器标记位意义 高四位和低六位中的三个奇数位未用上。]]></description>
+</item>
+<item>
+    <title>8086 开机流程笔记</title>
+    <link>https://moshimoshi.top/posts/8086-%E5%BC%80%E6%9C%BA%E6%B5%81%E7%A8%8B%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Fri, 23 Jul 2021 22:56:31 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://moshimoshi.top/posts/8086-%E5%BC%80%E6%9C%BA%E6%B5%81%E7%A8%8B%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[虚拟地址 地址总线 20 根，决定了处理器的寻址能力为 1MB，但是 16 位的寄存器（对应数据总线也是 16 根）决定了只凭 1 个寄存器是无法穷尽 1MB 的地址空间的，所以至少需要 2 个寄存器才能表示完整的地址空间。比如，用一个寄存器 A 存储物理地址的高 16 位，剩下的低 4 位地址用另一个 16 位寄存器表示绰绰有余，这样一来将寄存器 A 的内容左移 4 位再加上寄存器 B 的内容就可得到实际的物理地址，其中寄存器 A 的地址称为段地址，寄存器 B 的内容称为偏移地址，即实际物理地址时=段地址 * 16 + 偏移地址。「段地址:偏移地址」所表示的地址对被称为虚拟地址。由于两个 16 位寄存器表示一个 20 位的物理地址是绰绰有余，于是一个物理地址便可能有多个虚拟地址相对应，比如 0xfffff=0xffff * 16 + 0x000f=0xfff0 * 16 + 0x00ff = 0xff00 * 16 + 0x0fff。
+1MB 物理地址空间分配：
+ 0x00000~0x9FFFF: 10 * 2^16 = 640kB 由 RAM 提供，编程人员可自由使用 0xA0000~0xEFFFF: 5 * 2^16 = 320kB 对应特定的硬件设备的存储器空间，比如显存的 0xB8000~0xBFFFF：2^15 = 32KB 就在里面 0xF0000~0xFFFFF：1 * 2^16 = 64KB 对应 BIOS-BOM  8086 开机流程 BIOS 自检 开机流程：处理器有个名为 RESET 的引脚，用于接收复位信号，每当处理器加电或者 RESET 引脚由低电平变到高电平时，处理器都会执行硬件初始化的操作，以及一个可选的内部自测试，然后会讲所有的寄存器内容都恢复到初始状态，其中除了 CS 寄存器的初始状态为 0xFFFF，其余所有的寄存器初始状态都为 0x0000。然后处理器便从逻辑地址 0xffff:0000 即对应 0xffff0 的物理地址处开始执行它开机后的第一条指令，这个指令位于 BIOS-ROM 中，通常是一个跳转指令，跳转的地方对应 BIOS-ROM 的较低的地址，然后正式执行 BIOS 自检程序，自检程序的指令是固化在 BIOS-ROM 特定地址的，所以 0xffff0 处跳转指令对应的地址是固定，每次开机都是这样的流程。]]></description>
+</item>
+</channel>
+</rss>

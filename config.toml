@@ -1,0 +1,4 @@
+baseURL = "https://moshimoshi.top/"
+languageCode = "zh-CN"
+title = "Kisama's Blog"
+theme = "loveit"
