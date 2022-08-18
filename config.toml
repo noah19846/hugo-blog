@@ -55,7 +55,7 @@ avatarURL = "https://avatars.githubusercontent.com/u/62412453?v=4"
 title = "大音希声"
 # subtitle shown in home page (HTML format is supported)
 # 主页显示的网站副标题 (允许 HTML 格式)
-subtitle = "宁愿自由而危险，不要在安逸中被奴役。"
+subtitle = "宁愿危险而自由，不要在安逸中被奴役。"
 typeit = true
 
 [params.footer]
@@ -74,7 +74,7 @@ copyright = true
 author = true
 # site creation time
 # 网站创立年份
-since = 2021
+since = 2020
 # ICP info only in China (HTML format is supported)
 # ICP 备案信息，仅在中国使用 (支持 HTML 格式)
 icp = '<a href="https://beian.miit.gov.cn/" target="_blank">鄂ICP备2020021065号-1</a>'
