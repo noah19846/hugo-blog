@@ -59,3 +59,11 @@ tags:
 ## 为一些知名 package 所定义
 
 比如 rollup 的 module，typescript 的 types、typing 以及 lint-staged 的 lint-staged 等
+
+## 关于 browser、module、main、exports
+
+browser 和 module 字段主要是由一些打包工具比如 webpack、rollup 等使用，用以告诉那些 bundler 当前 package 只在浏览器端运行，以及使用的模块类型是否是 esm。
+
+main 和 exports 是 Node.js 标准引入，支持灵活配置的后者被推荐为在新项目中使用以代替前者。可以根据不同的运行环境（比如是通过 import 加载还是 require 加载）使用条件导出不同的代码；也可以定义 submodule 的导出，未被定义的 submodule 则不允许被其他 module 通过 module 路径导入，在支持 exports 的 Node.js 版本中，该字段的优先级大于 main 字段。
+
+个人感觉 exports 字段应该可以取代 browser 字段在那些 bundler 中的作用。
